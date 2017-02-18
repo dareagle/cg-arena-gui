@@ -24,6 +24,6 @@
       <Button layoutX="629.0" layoutY="515.0" mnemonicParsing="false" onAction="#logStuff" prefHeight="25.0" prefWidth="70.0" text="Reset" />
       <Button layoutX="520.0" layoutY="515.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Stop" />
       <Button layoutX="411.0" layoutY="515.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Start" />
-      <TextArea fx:id="consoleTextArea" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="241.0" prefWidth="685.0" />
+      <TextArea fx:id="consoleTextArea" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="241.0" prefWidth="685.0" wrapText="true" />
    </children>
 </Pane>

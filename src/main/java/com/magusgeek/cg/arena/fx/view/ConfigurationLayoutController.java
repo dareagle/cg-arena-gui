@@ -38,7 +38,7 @@ public class ConfigurationLayoutController extends AbstractLayoutController {
 
     @FXML
     private void logStuff() {
-        LOG.error("TOPKEK");
+        LOG.error("This is a very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo");
     }
 
 }

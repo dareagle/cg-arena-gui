@@ -18,9 +18,11 @@ import java.io.Serializable;
 public class TextAreaAppender extends AbstractAppender {
 
     private static volatile TextArea textArea = null;
+    private int maxContentLength;
 
-    protected TextAreaAppender(String name, Filter filter, Layout<? extends Serializable> layout) {
+    protected TextAreaAppender(String name, Filter filter, Layout<? extends Serializable> layout, int maxContentLength) {
         super(name, filter, layout);
+        this.maxContentLength = maxContentLength;
     }
 
     public static void setTextArea(final TextArea textArea) {
@@ -35,8 +37,11 @@ public class TextAreaAppender extends AbstractAppender {
                 try {
                     if (textArea != null) {
                         if (textArea.getText().length() == 0) {
-                            textArea.setText(message);
+                            textArea.setText(message.trim());
                         } else {
+                            if (textArea.getText().length() > maxContentLength) {
+                                textArea.deleteText(0, textArea.getText().indexOf("\n") + 1);
+                            }
                             textArea.selectEnd();
                             textArea.insertText(textArea.getText().length(),
                                     message);
@@ -56,7 +61,7 @@ public class TextAreaAppender extends AbstractAppender {
             @PluginAttribute("name") String name,
             @PluginElement("Layout") Layout<? extends Serializable> layout,
             @PluginElement("Filter") final Filter filter,
-            @PluginAttribute("otherAttribute") String otherAttribute) {
+            @PluginAttribute("maxContentLength") int maxContentLength) {
         if (name == null) {
             LOGGER.error("No name provided for MyCustomAppenderImpl");
             return null;
@@ -64,6 +69,6 @@ public class TextAreaAppender extends AbstractAppender {
         if (layout == null) {
             layout = PatternLayout.createDefaultLayout();
         }
-        return new TextAreaAppender(name, filter, layout);
+        return new TextAreaAppender(name, filter, layout, maxContentLength);
     }
 }
