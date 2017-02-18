@@ -38,6 +38,7 @@ public class ConfigurationLayoutController extends AbstractLayoutController {
 
     @FXML
     private void logStuff() {
+        main.addListElement();
         LOG.error("This is a very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo very long shit sentence yo");
     }
 

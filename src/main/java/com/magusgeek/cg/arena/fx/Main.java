@@ -1,8 +1,12 @@
 package com.magusgeek.cg.arena.fx;
 
+import com.magusgeek.cg.arena.GameResult;
 import com.magusgeek.cg.arena.fx.view.ConfigurationLayoutController;
+import com.magusgeek.cg.arena.fx.view.MainLayoutController;
 import com.magusgeek.cg.arena.fx.view.PlayerLayoutController;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -17,11 +21,18 @@ public class Main extends Application {
 
     private static final Log LOG = LogFactory.getLog(Main.class);
 
+    /**
+     * fxml shit
+     */
     private Stage primaryStage;
-
     private BorderPane mainLayout;
     private Pane playerLayout;
     private Pane configurationLayout;
+
+    /**
+     * shared gameresult list
+     */
+    private ObservableList<GameResult> results = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
     @Override
     public void start(Stage primaryStage) {
@@ -31,17 +42,15 @@ public class Main extends Application {
         initRootLayout();
         initLayouts();
         showConfigurationLayout();
-
-        LOG.debug("I'm debugging some shit right now");
-        LOG.error("And now I'm writing an error log yo");
-        LOG.info("Meh, just info log, don't worry bro ...");
     }
 
-    public void initRootLayout() {
+    private void initRootLayout() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("view/MainLayout.fxml"));
             mainLayout = loader.load();
+            MainLayoutController mainLayoutController = loader.getController();
+            mainLayoutController.setMainApp(this);
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(mainLayout);
@@ -53,26 +62,35 @@ public class Main extends Application {
         }
     }
 
-    public void initLayouts() {
+    private void initLayouts() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("view/PlayerLayout.fxml"));
             playerLayout = loader.load();
             PlayerLayoutController playerLayoutController = loader.getController();
-            playerLayoutController.setMain(this);
+            playerLayoutController.setMainApp(this);
 
             loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("view/ConfigurationLayout.fxml"));
             configurationLayout = loader.load();
             ConfigurationLayoutController configurationLayoutController = loader.getController();
-            configurationLayoutController.setMain(this);
+            configurationLayoutController.setMainApp(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    //    public void start() {
+
     public void showConfigurationLayout() {
         mainLayout.setLeft(configurationLayout);
+    }
+
+    public void addListElement() {
+        GameResult result = new GameResult();
+        result.getPositions().add((int) Math.random() * 4);
+
+        results.add(result);
     }
 
     public void showPlayerLayout() {
@@ -81,5 +99,10 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    //    }
+    public ObservableList<GameResult> getResults() {
+        return results;
     }
 }

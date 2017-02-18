@@ -3,7 +3,7 @@
     <groupId>com.magusgeek</groupId>
     <artifactId>cg-arena</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>CodingGame arena</name>
+    <name>CodingGame arena GUI</name>
 
     <dependencies>
 
@@ -66,7 +66,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.magusgeek.cg.arena.Arena</mainClass>
+                            <mainClass>com.magusgeek.cg.arena.fx.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -85,12 +85,20 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.magusgeek.cg.arena.Arena</mainClass>
+                                    <mainClass>com.magusgeek.cg.arena.fx.Main</mainClass>
                                 </transformer>
+                                <transformer implementation="com.github.edwgiz.mavenShadePlugin.log4j2CacheTransformer.PluginsCacheFileTransformer" />
                             </transformers>
                         </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.edwgiz</groupId>
+                        <artifactId>maven-shade-plugin.log4j2-cachefile-transformer</artifactId>
+                        <version>2.6.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
         </plugins>

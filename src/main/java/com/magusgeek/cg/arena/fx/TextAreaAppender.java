@@ -43,8 +43,7 @@ public class TextAreaAppender extends AbstractAppender {
                                 textArea.deleteText(0, textArea.getText().indexOf("\n") + 1);
                             }
                             textArea.selectEnd();
-                            textArea.insertText(textArea.getText().length(),
-                                    message);
+                            textArea.insertText(textArea.getText().length(), message);
                         }
                     }
                 } catch (final Throwable t) {

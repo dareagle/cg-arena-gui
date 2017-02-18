@@ -18,7 +18,30 @@ import com.magusgeek.cg.arena.util.Mutable;
 
 public class Arena {
     private static final Log LOG = LogFactory.getLog(Arena.class);
-    
+
+    public static void launch(int n, int t) {
+//        try {
+//            LOG.info("Number of games to play : " + n);
+//            LOG.info("Number of thread to spawn : " + t);
+//
+//            PlayerStats[] playerStats = new PlayerStats[playersCommandLines.size()];
+//            for (int i = 0; i < playersCommandLines.size(); ++i) {
+//                playerStats[i] = new PlayerStats();
+//            }
+//
+//            // Spawn arena threads
+//
+//            Class<Engine> clazz = (Class<Engine>) Class.forName(engines.getProperty(engineName));
+//            Mutable<Integer> count = new Mutable<Integer>(0);
+//            for (int i = 0; i < t; ++i) {
+//                new ArenaThread(i + 1, playersCommandLines, count, playerStats, clazz, n).start();
+//            }
+//        } catch (Exception exception) {
+//            LOG.fatal("cg-arena fail to start", exception);
+//            System.exit(1);
+//        }
+    }
+
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         try {

@@ -6,7 +6,7 @@ public abstract class AbstractLayoutController {
 
     protected Main main;
 
-    public void setMain(Main main) {
+    public void setMainApp(Main main) {
         this.main = main;
     }
 }
