@@ -1,6 +1,8 @@
 package com.magusgeek.cg.arena.fx;
 
+import com.magusgeek.cg.arena.Arena;
 import com.magusgeek.cg.arena.GameResult;
+import com.magusgeek.cg.arena.PlayerStats;
 import com.magusgeek.cg.arena.fx.view.ConfigurationLayoutController;
 import com.magusgeek.cg.arena.fx.view.MainLayoutController;
 import com.magusgeek.cg.arena.fx.view.PlayerLayoutController;
@@ -16,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Main extends Application {
 
@@ -30,8 +33,9 @@ public class Main extends Application {
     private Pane configurationLayout;
 
     /**
-     * shared gameresult list
+     * synchronised shit
      */
+    private ObservableList<PlayerStats> stats = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
     private ObservableList<GameResult> results = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
     @Override
@@ -80,7 +84,23 @@ public class Main extends Application {
         }
     }
 
-    //    public void start() {
+    public void launchArena(int gamesNumber, int threadsNumber, String engineClassName, List<String> commandLines) {
+        stats.clear();
+        for (int i = 0; i < commandLines.size(); i++) {
+            stats.add(new PlayerStats());
+        }
+        results.clear();
+        Arena.launch(gamesNumber, threadsNumber, engineClassName, commandLines, stats, results);
+    }
+
+    public void stopArena() {
+        Arena.stop();
+    }
+
+    public void resetResults() {
+        stats.clear();
+        results.clear();
+    }
 
     public void showConfigurationLayout() {
         mainLayout.setLeft(configurationLayout);

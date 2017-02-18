@@ -1,13 +1,12 @@
 package com.magusgeek.cg.arena.engine;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.magusgeek.cg.arena.GameResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.magusgeek.cg.arena.GameResult;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Engine {
     private static final Log LOG = LogFactory.getLog(Engine.class);
@@ -38,7 +37,7 @@ public abstract class Engine {
             if (debug) {
                 LOG.debug("Starting player " + (i + 1) + " process");
             }
-            
+
             try {
                 process.add(new ProcessBuilder(commandLines.get(i).split(" ")).start());
             } catch (IOException exception) {
@@ -52,7 +51,7 @@ public abstract class Engine {
             if (debug) {
                 LOG.debug("Initializing");
             }
-            
+
             result = new GameResult();
 
             initialize();
@@ -75,7 +74,7 @@ public abstract class Engine {
             destroyAll();
             System.exit(1);
         }
-        
+
         return result;
     }
 

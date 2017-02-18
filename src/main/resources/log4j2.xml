@@ -2,17 +2,17 @@
 <Configuration>
     <Appenders>
         <Console name="STDOUT" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss,SSS} %-5p [%C] %m%n" />
+            <PatternLayout pattern="%d{HH:mm:ss,SSS} %-5p [%C] %m%n"/>
         </Console>
         <TextAreaAppender name="CUSTOMCONSOLE" maxContentLength="10000">
-            <PatternLayout pattern="%n%d{HH:mm:ss} : %m" />
+            <PatternLayout pattern="%n%d{HH:mm:ss} : %m"/>
         </TextAreaAppender>
     </Appenders>
     <Loggers>
-        <Logger name="org.apache.log4j.xml" level="info" />
-        <Root level="info">
-            <AppenderRef ref="STDOUT" />
-            <AppenderRef ref="CUSTOMCONSOLE" />
+        <Logger name="org.apache.log4j.xml" level="info"/>
+        <Root level="debug">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="CUSTOMCONSOLE"/>
         </Root>
     </Loggers>
 </Configuration>

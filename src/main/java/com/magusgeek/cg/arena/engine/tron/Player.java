@@ -52,14 +52,14 @@ public class Player extends PlayerBase {
 
     public Point next(Direction dir) {
         switch (dir) {
-        case LEFT:
-            return new Point(x - 1, y);
-        case RIGHT:
-            return new Point(x + 1, y);
-        case UP:
-            return new Point(x, y - 1);
-        case DOWN:
-            return new Point(x, y + 1);
+            case LEFT:
+                return new Point(x - 1, y);
+            case RIGHT:
+                return new Point(x + 1, y);
+            case UP:
+                return new Point(x, y - 1);
+            case DOWN:
+                return new Point(x, y + 1);
         }
 
         // Logic prevent this

@@ -20,11 +20,11 @@ public class PlayerBase {
         in = new Scanner(process.getInputStream());
         error = process.getErrorStream();
     }
-    
+
     public void cleanErrorStream() throws IOException {
-       while (error.available() != 0) {
-           error.read();
-       }
+        while (error.available() != 0) {
+            error.read();
+        }
     }
 
     public int getId() {

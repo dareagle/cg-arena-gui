@@ -1,14 +1,13 @@
 package com.magusgeek.cg.arena.engine.tron;
 
+import com.magusgeek.cg.arena.engine.Engine;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import com.magusgeek.cg.arena.engine.Engine;
 
 public class Tron extends Engine {
     private static final Log LOG = LogFactory.getLog(Tron.class);
@@ -59,7 +58,7 @@ public class Tron extends Engine {
     private void kill(Player player) {
         player.setDead(true);
         playersCount -= 1;
-        
+
         result.getPositions().add(player.getId());
 
         // If we have only 1 player left, it's the winner !
@@ -69,7 +68,7 @@ public class Tron extends Engine {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Winner : " + id);
             }
-            
+
             result.getPositions().add(id);
 
             destroyAll();
@@ -96,7 +95,7 @@ public class Tron extends Engine {
 
             if (debug) {
                 LOG.debug("Player " + (player.getId() + 1) + " turn " + turn);
-                LOG.debug("Sending informations to the process");
+                LOG.debug("Sending information to the process");
             }
             player.getOut().println(players.size() + " " + player.getId());
             for (Player p : players) {
@@ -109,7 +108,7 @@ public class Tron extends Engine {
             }
             player.cleanErrorStream();
 
-            String response = null;
+            String response;
             try {
                 response = player.getIn().nextLine();
             } catch (NoSuchElementException exception) {
@@ -133,7 +132,7 @@ public class Tron extends Engine {
                 int x = next.getX();
                 int y = next.getY();
 
-                if (x < 0 || x > W || y < 0 || y > H) {
+                if (x < 0 || x >= W || y < 0 || y >= H) {
                     if (debug) {
                         LOG.debug("Player " + (player.getId() + 1) + " dead at turn " + turn + " for moving outside of the map");
                     }
@@ -150,7 +149,7 @@ public class Tron extends Engine {
                     kill(player);
                     continue;
                 }
-                
+
                 if (end) {
                     break;
                 }

@@ -1,13 +1,13 @@
 package com.magusgeek.cg.arena;
 
-import java.util.Collections;
-import java.util.List;
-
+import com.magusgeek.cg.arena.engine.Engine;
+import com.magusgeek.cg.arena.util.Mutable;
+import javafx.collections.ObservableList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.magusgeek.cg.arena.engine.Engine;
-import com.magusgeek.cg.arena.util.Mutable;
+import java.util.Collections;
+import java.util.List;
 
 public class ArenaThread extends Thread {
     private static final Log LOG = LogFactory.getLog(ArenaThread.class);
@@ -15,22 +15,36 @@ public class ArenaThread extends Thread {
     private int id;
     private List<String> commandLines;
     private Mutable<Integer> count;
-    private PlayerStats[] playerStats;
+    private ObservableList<PlayerStats> stats;
+    private ObservableList<GameResult> results;
     private int n;
     private Class<Engine> clazz;
+    private volatile Thread currentThread = null;
 
-    public ArenaThread(int id, List<String> commandLines, Mutable<Integer> count, PlayerStats[] playerStats, Class<Engine> clazz, int n) {
+    public ArenaThread(int id, List<String> commandLines, Mutable<Integer> count, ObservableList<PlayerStats> stats, ObservableList<GameResult> results, Class<Engine> clazz, int n) {
         this.id = id;
         this.commandLines = commandLines;
         this.count = count;
-        this.playerStats = playerStats;
+        this.stats = stats;
+        this.results = results;
         this.n = n;
         this.clazz = clazz;
     }
 
+    public void cancel() {
+        currentThread.interrupt();
+    }
+
     @Override
     public void run() {
+        currentThread = Thread.currentThread();
+
         while (true) {
+            if (currentThread.isInterrupted()) {
+                LOG.info("Thread " + id + " has been stopped");
+                break;
+            }
+            
             int game = 0;
             synchronized (count) {
                 if (count.getValue() < n) {
@@ -52,17 +66,22 @@ public class ArenaThread extends Thread {
                 List<Integer> positions = result.getPositions();
                 Collections.reverse(positions);
 
-                synchronized (playerStats) {
+                synchronized (stats) {
                     for (int j = 0; j < positions.size(); ++j) {
-                        playerStats[positions.get(j)].add(j);
+                        stats.get(positions.get(j)).add(j);
                     }
+                }
+
+                synchronized (results) {
+                    result.setId(results.size());
+                    results.add(result);
                 }
 
                 LOG.info("Thread " + id + " : end of the game " + game);
 
                 if (game == n) {
-                    for (int i = 0; i < playerStats.length; ++i) {
-                        LOG.info("Player " + (i + 1) + " stats : " + playerStats[i]);
+                    for (int i = 0; i < stats.size(); ++i) {
+                        LOG.info("Player " + (i + 1) + " stats : " + stats.get(i));
                     }
                 }
             } catch (Exception exception) {
