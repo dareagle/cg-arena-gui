@@ -31,7 +31,7 @@ public class MainLayoutController extends AbstractLayoutController {
             Platform.runLater(() -> {
                 setText(null);
                 if (!empty && item != null) {
-                    setText("[" + item.getId() + "] Player " + item.getPositions().get(0) + " wins");
+                    setText("[" + item.getId() + "] Player " + (item.getPositions().get(0) + 1) + " wins");
                 }
             });
         }

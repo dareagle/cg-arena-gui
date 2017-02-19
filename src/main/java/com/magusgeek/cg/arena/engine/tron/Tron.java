@@ -138,7 +138,11 @@ public class Tron extends Engine {
                     }
 
                     kill(player);
-                    continue;
+                    if (end) {
+                        break;
+                    } else {
+                        continue;
+                    }
                 }
 
                 if (map[y][x] != -1) {
@@ -147,7 +151,11 @@ public class Tron extends Engine {
                     }
 
                     kill(player);
-                    continue;
+                    if (end) {
+                        break;
+                    } else {
+                        continue;
+                    }
                 }
 
                 if (end) {
@@ -162,6 +170,11 @@ public class Tron extends Engine {
                 }
 
                 kill(player);
+                if (end) {
+                    break;
+                } else {
+                    continue;
+                }
             }
 
             if (end) {
