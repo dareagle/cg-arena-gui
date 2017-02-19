@@ -36,6 +36,7 @@ public class TextAreaAppender extends AbstractAppender {
             Platform.runLater(() -> {
                 try {
                     if (textArea != null) {
+
                         if (textArea.getText().length() == 0) {
                             textArea.setText(message.trim());
                         } else {
@@ -45,6 +46,7 @@ public class TextAreaAppender extends AbstractAppender {
                             textArea.selectEnd();
                             textArea.insertText(textArea.getText().length(), message);
                         }
+
                     }
                 } catch (final Throwable t) {
                     System.out.println("Unable to append log to text area: " + t.getMessage());

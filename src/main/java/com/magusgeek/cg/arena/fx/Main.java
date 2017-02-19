@@ -92,13 +92,6 @@ public class Main extends Application {
         mainLayout.setLeft(configurationLayout);
     }
 
-    public void addListElement() {
-        GameResult result = new GameResult();
-        result.getPositions().add((int) Math.random() * 4);
-
-        results.add(result);
-    }
-
     public void showPlayerLayout() {
         mainLayout.setLeft(playerLayout);
     }
