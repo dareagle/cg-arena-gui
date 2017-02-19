@@ -38,4 +38,18 @@ public class PlayerStats {
 
         return result;
     }
+
+    public String toTextflowString(int pid, int nbPlayers) {
+        String result = "P" + pid + " : ";
+
+        if (total.get() > 0) {
+            for (int i = 0; i < nbPlayers; i++) {
+                result += stats[i] + "(" + (stats[i] * 100 / total.get()) + "%) ";
+            }
+        } else {
+            result += " no games played";
+        }
+
+        return result;
+    }
 }

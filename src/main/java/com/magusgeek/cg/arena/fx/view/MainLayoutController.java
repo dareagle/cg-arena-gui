@@ -9,6 +9,8 @@ import javafx.scene.control.ListView;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.stream.Collectors;
+
 public class MainLayoutController extends AbstractLayoutController {
 
     private static final Log LOG = LogFactory.getLog(MainLayoutController.class);
@@ -31,7 +33,8 @@ public class MainLayoutController extends AbstractLayoutController {
             Platform.runLater(() -> {
                 setText(null);
                 if (!empty && item != null) {
-                    setText("[" + item.getId() + "] Player " + (item.getPositions().get(0) + 1) + " wins");
+                    setText("[" + item.getId() + "] Player " + (item.getPositions().get(0) + 1) + " wins (" + item.getPositions().stream().map(e -> (e + 1) + "").collect(Collectors.joining(",")) +
+                            ")");
                 }
             });
         }

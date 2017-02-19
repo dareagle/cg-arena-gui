@@ -116,10 +116,17 @@ public class ConfigurationLayoutController extends AbstractLayoutController {
         synchronized (main.getStats()) {
             Platform.runLater(() -> {
                 resultsTextFlow.getChildren().clear();
-                Text text1 = new Text(main.getStats().get(0).getStats()[0] + " wins out of " + main.getStats().get(0).getTotal());
-                text1.setFill(Color.RED);
-                text1.setFont(Font.font("Helvetica", FontPosture.REGULAR, 15));
-                resultsTextFlow.getChildren().add(text1);
+
+                Text blank = new Text("\n");
+                blank.setFont(Font.font("Helvetica", FontPosture.REGULAR, 15));
+                resultsTextFlow.getChildren().add(blank);
+
+                for (int i = 0; i < main.getStats().size(); i++) {
+                    Text playerText = new Text(main.getStats().get(i).toTextflowString(i, main.getStats().size()) + "\n");
+                    playerText.setFill(Color.BLACK);
+                    playerText.setFont(Font.font("Helvetica", FontPosture.REGULAR, 13));
+                    resultsTextFlow.getChildren().add(playerText);
+                }
             });
         }
     }
