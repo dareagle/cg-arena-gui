@@ -44,7 +44,7 @@ public class ArenaThread extends Thread {
                 LOG.info("Thread " + id + " has been stopped");
                 break;
             }
-            
+
             int game = 0;
             synchronized (count) {
                 if (count.getValue() < n) {

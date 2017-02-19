@@ -3,9 +3,7 @@ package com.magusgeek.cg.arena.fx;
 import com.magusgeek.cg.arena.Arena;
 import com.magusgeek.cg.arena.GameResult;
 import com.magusgeek.cg.arena.PlayerStats;
-import com.magusgeek.cg.arena.fx.view.ConfigurationLayoutController;
-import com.magusgeek.cg.arena.fx.view.MainLayoutController;
-import com.magusgeek.cg.arena.fx.view.PlayerLayoutController;
+import com.magusgeek.cg.arena.fx.view.AbstractLayoutController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,22 +37,19 @@ public class Main extends Application {
     private ObservableList<GameResult> results = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("cg-arena gui");
 
         initRootLayout();
-        initLayouts();
+        playerLayout = loadLayout("view/PlayerLayout.fxml");
+        configurationLayout = loadLayout("view/ConfigurationLayout.fxml");
         showConfigurationLayout();
     }
 
     private void initRootLayout() {
         try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("view/MainLayout.fxml"));
-            mainLayout = loader.load();
-            MainLayoutController mainLayoutController = loader.getController();
-            mainLayoutController.setMainApp(this);
+            mainLayout = (BorderPane) loadLayout("view/MainLayout.fxml");
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(mainLayout);
@@ -66,22 +61,13 @@ public class Main extends Application {
         }
     }
 
-    private void initLayouts() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("view/PlayerLayout.fxml"));
-            playerLayout = loader.load();
-            PlayerLayoutController playerLayoutController = loader.getController();
-            playerLayoutController.setMainApp(this);
-
-            loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("view/ConfigurationLayout.fxml"));
-            configurationLayout = loader.load();
-            ConfigurationLayoutController configurationLayoutController = loader.getController();
-            configurationLayoutController.setMainApp(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private Pane loadLayout(String location) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource(location));
+        Pane pane = loader.load();
+        AbstractLayoutController controller = loader.getController();
+        controller.setMainApp(this);
+        return pane;
     }
 
     public void launchArena(int gamesNumber, int threadsNumber, String engineClassName, List<String> commandLines) {
@@ -121,8 +107,11 @@ public class Main extends Application {
         launch(args);
     }
 
-    //    }
     public ObservableList<GameResult> getResults() {
         return results;
+    }
+
+    public ObservableList<PlayerStats> getStats() {
+        return stats;
     }
 }

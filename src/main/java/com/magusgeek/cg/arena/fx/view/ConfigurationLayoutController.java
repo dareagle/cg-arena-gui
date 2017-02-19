@@ -1,11 +1,20 @@
 package com.magusgeek.cg.arena.fx.view;
 
+import com.magusgeek.cg.arena.PlayerStats;
+import com.magusgeek.cg.arena.fx.Main;
 import com.magusgeek.cg.arena.fx.TextAreaAppender;
-import com.sun.xml.internal.ws.util.StringUtils;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -41,6 +50,11 @@ public class ConfigurationLayoutController extends AbstractLayoutController {
     private TextField p3CommandLineInput;
 
     @FXML
+    private TextFlow resultsTextFlow;
+
+    private ChangeListener<Number> statTotalListener = (observable, oldValue, newValue) -> refreshStatsTextflow();
+
+    @FXML
     private void initialize() {
         TextAreaAppender.setTextArea(consoleTextArea);
 
@@ -55,6 +69,21 @@ public class ConfigurationLayoutController extends AbstractLayoutController {
         }
     }
 
+    @Override
+    public void setMainApp(Main main) {
+        super.setMainApp(main);
+        main.getStats().addListener((ListChangeListener<PlayerStats>) c -> {
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    registerStatsListener(c.getAddedSubList());
+                }
+                if (c.wasRemoved()) {
+                    unregisterStatsListener(c.getRemoved());
+                }
+            }
+        });
+    }
+
     @FXML
     private void startAction() {
         consoleTextArea.clear();
@@ -63,7 +92,36 @@ public class ConfigurationLayoutController extends AbstractLayoutController {
         if (!p1CommandLineInput.getText().isEmpty()) commandList.add(p1CommandLineInput.getText());
         if (!p2CommandLineInput.getText().isEmpty()) commandList.add(p2CommandLineInput.getText());
         if (!p3CommandLineInput.getText().isEmpty()) commandList.add(p3CommandLineInput.getText());
-        main.launchArena(Integer.valueOf(nbGamesInput.getText()), Integer.valueOf(nbThreadsInput.getText()), engineChoiceBox.getValue() + "", commandList);
+        try {
+            main.launchArena(Integer.valueOf(nbGamesInput.getText()), Integer.valueOf(nbThreadsInput.getText()), engineChoiceBox.getValue() + "", commandList);
+        } catch (NumberFormatException | NullPointerException e) {
+            LOG.error("Error while launching Arena, wrong parameters", e);
+        }
+    }
+
+    private void unregisterStatsListener(List<? extends PlayerStats> removed) {
+        for (PlayerStats stat : removed) {
+            System.err.println("removing listener");
+            stat.getTotal().removeListener(statTotalListener);
+        }
+    }
+
+    private void registerStatsListener(List<? extends PlayerStats> added) {
+        for (PlayerStats stat : added) {
+            stat.getTotal().addListener(statTotalListener);
+        }
+    }
+
+    private void refreshStatsTextflow() {
+        synchronized (main.getStats()) {
+            Platform.runLater(() -> {
+                resultsTextFlow.getChildren().clear();
+                Text text1 = new Text(main.getStats().get(0).getStats()[0] + " wins out of " + main.getStats().get(0).getTotal());
+                text1.setFill(Color.RED);
+                text1.setFont(Font.font("Helvetica", FontPosture.REGULAR, 15));
+                resultsTextFlow.getChildren().add(text1);
+            });
+        }
     }
 
     @FXML
